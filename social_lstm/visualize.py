@@ -147,7 +147,7 @@ def main():
     withBackground = 0
 
     for i in range(len(results)):
-        print i
+        print (i)
         name = 'sequence' + str(i)
         plot_trajectories(results[i][0], results[i][1], results[i][2], results[i][3], name, plot_directory, withBackground)
 
