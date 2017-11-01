@@ -24,9 +24,16 @@ class DataLoader():
         forcePreProcess : Flag to forcefully preprocess the data again from csv files
         '''
         # List of data directories where raw data resides
-        self.data_dirs = ['./data/eth/univ', './data/eth/hotel',
-                          './data/ucy/zara/zara01', './data/ucy/zara/zara02',
-                          './data/ucy/univ']
+        # self.data_dirs = ['/home/hesl/PycharmProjects/social-lstm-pytorch/data/eth/univ', '/home/hesl/PycharmProjects/social-lstm-pytorch/data/eth/hotel',
+        #                   '/home/hesl/PycharmProjects/social-lstm-pytorch/data/ucy/zara/zara01', '/home/hesl/PycharmProjects/social-lstm-pytorch/data/ucy/zara/zara02',
+        #                   '/home/hesl/PycharmProjects/social-lstm-pytorch/data/ucy/univ']
+
+        self.data_dirs = ['/home/hesl/PycharmProjects/social-lstm-pytorch/data/eth/univ/HEWEI',
+                          '/home/hesl/PycharmProjects/social-lstm-pytorch/data/eth/hotel/HEWEI',
+                          '/home/hesl/PycharmProjects/social-lstm-pytorch/data/ucy/zara/zara01/HEWEI',
+                          '/home/hesl/PycharmProjects/social-lstm-pytorch/data/ucy/zara/zara02/HEWEI',
+                          '/home/hesl/PycharmProjects/social-lstm-pytorch/data/ucy/univ/HEWEI']
+
         self.used_data_dirs = [self.data_dirs[x] for x in datasets]
         self.infer = infer
 
@@ -34,7 +41,8 @@ class DataLoader():
         self.numDatasets = len(self.data_dirs)
 
         # Data directory where the pre-processed pickle file resides
-        self.data_dir = './data'
+        self.data_dir = '/home/hesl/PycharmProjects/social-lstm-pytorch/data'
+
 
         # Store the arguments
         self.batch_size = batch_size
@@ -64,7 +72,7 @@ class DataLoader():
         Function that will pre-process the pixel_pos.csv files of each dataset
         into data with occupancy grid that can be used
         params:
-        data_dirs : List of directories where raw data resides
+        data_dirs : Lis./t of directories where raw data resides
         data_file : The file into which all the pre-processed data needs to be stored
         '''
         # all_frame_data would be a list of list of numpy arrays corresponding to each dataset
@@ -86,7 +94,10 @@ class DataLoader():
         for directory in data_dirs:
             # define path of the csv file of the current dataset
             # file_path = os.path.join(directory, 'pixel_pos.csv')
-            file_path = os.path.join(directory, 'pixel_pos_interpolate.csv')
+
+            #file_path = os.path.join(directory, 'pixel_pos_interpolate.csv')
+
+            file_path = os.path.join(directory, 'world_coordinate_inter_normalized.csv')
 
             # Load the data from the csv file
             data = np.genfromtxt(file_path, delimiter=',')

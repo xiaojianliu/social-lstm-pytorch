@@ -113,11 +113,14 @@ def plot_trajectories(true_trajs, pred_trajs, nodesPresent, obs_length, name, pl
         plt.ylim((1, 0))
         plt.xlim((0, 1))
 
-    # plt.show()
+    plt.show()
     if withBackground:
         plt.savefig('plot_with_background/'+name+'.png')
     else:
-        plt.savefig(plot_directory+'/'+name+'.png')
+        file=plot_directory+name+'.png'
+        print(file)
+        plt.savefig(file)
+
 
     plt.gcf().clear()
     plt.close()
@@ -135,11 +138,11 @@ def main():
     args = parser.parse_args()
 
     # Save directory
-    save_directory = 'save/'
+    save_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/save/'
     save_directory += str(args.test_dataset) + '/'
-    plot_directory = 'plot/'
+    plot_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/plot/'
 
-    f = open(save_directory+'/results.pkl', 'rb')
+    f = open(save_directory+'results.pkl', 'rb')
     results = pickle.load(f)
 
     # print "Enter 0 (or) 1 for without/with background"
