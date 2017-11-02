@@ -64,7 +64,7 @@ def main():
     parser.add_argument('--grid_size', type=int, default=4,
                         help='Grid size of the social grid')
     # The leave out dataset
-    parser.add_argument('--leaveDataset', type=int, default=2,
+    parser.add_argument('--leaveDataset', type=int, default=1,
                         help='The dataset index to be left out in training')
     # Lambda regularization parameter (L2)
     parser.add_argument('--lambda_param', type=float, default=0.0001,
@@ -88,7 +88,7 @@ def train(args):
 
     # Log directory
     log_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/log/'
-  #  log_directory += str(args.leaveDataset) + '/'
+    log_directory += str(args.leaveDataset) + '/'
 
     # Logging files
     log_file_curve = open(os.path.join(log_directory, 'log_curve.txt'), 'w')
@@ -96,7 +96,7 @@ def train(args):
 
     # Save directory
     save_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/save/'
- #   save_directory += str(args.leaveDataset) + '/'
+    save_directory += str(args.leaveDataset) + '/'
 
     # Dump the arguments into the configuration file
     with open(os.path.join(save_directory, 'config.pkl'), 'wb') as f:

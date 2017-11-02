@@ -34,7 +34,7 @@ def main():
     parser.add_argument('--pred_length', type=int, default=12,
                         help='Predicted length of the trajectory')
     # Test dataset
-    parser.add_argument('--test_dataset', type=int, default=2,
+    parser.add_argument('--test_dataset', type=int, default=0,
                         help='Dataset to be tested on')
 
     # Model to be loaded
@@ -45,8 +45,7 @@ def main():
     sample_args = parser.parse_args()
 
     # Save directory
-    save_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/save/'
-                     #+ str(sample_args.test_dataset) + '/'
+    save_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/save/'+ str(sample_args.test_dataset) + '/'
 
     # Define the path for the config file for saved args
     with open(os.path.join(save_directory, 'config.pkl'), 'rb') as f:

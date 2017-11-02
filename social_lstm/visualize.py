@@ -97,7 +97,8 @@ def plot_trajectories(true_trajs, pred_trajs, nodesPresent, obs_length, name, pl
                 traj_data[ped][1].append(pred_pos[ped, :])
 
     for j in traj_data:
-        c = np.random.rand(3, 1)
+        c = np.ravel(np.random.rand(3, 1))
+        print(c)
         true_traj_ped = traj_data[j][0]  # List of [x,y] elements
         pred_traj_ped = traj_data[j][1]
 
@@ -114,12 +115,12 @@ def plot_trajectories(true_trajs, pred_trajs, nodesPresent, obs_length, name, pl
         plt.xlim((0, 1))
 
     plt.show()
-    if withBackground:
-        plt.savefig('plot_with_background/'+name+'.png')
-    else:
-        file=plot_directory+name+'.png'
-        print(file)
-        plt.savefig(file)
+    # if withBackground:
+    #     plt.savefig('plot_with_background/'+name+'.png')
+    # else:
+    #     file=plot_directory+name+'.png'
+    #     print(file)
+    #     plt.savefig(file)
 
 
     plt.gcf().clear()
@@ -131,7 +132,7 @@ def main():
 
     # Experiments
 
-    parser.add_argument('--test_dataset', type=int, default=0,
+    parser.add_argument('--test_dataset', type=int, default=2,
                         help='test dataset index')
 
     # Parse the parameters
