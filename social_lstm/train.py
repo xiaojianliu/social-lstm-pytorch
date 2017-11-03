@@ -64,7 +64,7 @@ def main():
     parser.add_argument('--grid_size', type=int, default=4,
                         help='Grid size of the social grid')
     # The leave out dataset
-    parser.add_argument('--leaveDataset', type=int, default=1,
+    parser.add_argument('--leaveDataset', type=int, default=0,
                         help='The dataset index to be left out in training')
     # Lambda regularization parameter (L2)
     parser.add_argument('--lambda_param', type=float, default=0.0001,
@@ -87,7 +87,7 @@ def train(args):
     stgraph = ST_GRAPH(args.batch_size, args.seq_length + 1)
 
     # Log directory
-    log_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/log/'
+    log_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/log/HEWEI/'
     log_directory += str(args.leaveDataset) + '/'
 
     # Logging files
@@ -95,7 +95,7 @@ def train(args):
     log_file = open(os.path.join(log_directory, 'val.txt'), 'w')
 
     # Save directory
-    save_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/save/'
+    save_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/save/HEWEI/'
     save_directory += str(args.leaveDataset) + '/'
 
     # Dump the arguments into the configuration file
