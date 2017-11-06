@@ -97,7 +97,7 @@ class DataLoader():
 
             #file_path = os.path.join(directory, 'pixel_pos_interpolate.csv')
 
-            file_path = os.path.join(directory, 'world_coordinate_inter.csv')
+            file_path = os.path.join(directory, 'world_coordinate_inter_normalized.csv')
 
             # Load the data from the csv file
             data = np.genfromtxt(file_path, delimiter=',')

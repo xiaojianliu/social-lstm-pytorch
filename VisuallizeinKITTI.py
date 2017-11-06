@@ -32,14 +32,14 @@ sample_args = parser.parse_args()
 '''KITTI Training Setting'''
 
 #save_directory = '/home/hesl/PycharmProjects/social-lstm-tf-HW/ResultofTrainingKITTI-13NTestonKITTI-17/save'
-save_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/save/2_WorldcoordUnnormalized/'
+save_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/save/'+str(sample_args.visual_dataset)+'/'
 
 #save_directory ='/home/hesl/PycharmProjects/social-lstm-tf-HW/ResultofTrainingETH1TestETH0/save/'
 
 with open(os.path.join(save_directory, 'config.pkl'), 'rb') as f:
     saved_args = pickle.load(f)
 
-f = open('/home/hesl/PycharmProjects/social-lstm-pytorch/save/2_WorldcoordUnnormalized/results.pkl', 'rb')
+f = open('/home/hesl/PycharmProjects/social-lstm-pytorch/save/'+str(sample_args.visual_dataset)+'/results.pkl', 'rb')
 results = pickle.load(f)
 
 dataset = [sample_args.visual_dataset]
@@ -201,74 +201,6 @@ print(int((len(data_loader.frameList[0])/10)/(sample_args.obs_length+sample_args
 #
 # #10frame-by-10frame
 # #Each Trajectory
-for k in range(int((len(data_loader.frameList[0])/10)/(sample_args.obs_length+sample_args.pred_length))):
-    #Each frame
-    for j in range(sample_args.obs_length+sample_args.pred_length):
-
-        sourceFileName = videopath[sample_args.visual_dataset]+"frame-" + str(int(k*(10*(sample_args.obs_length+sample_args.pred_length))+j*10+data_loader.frameList[0][0])).zfill(3) + ".jpg"
-
-        avatar= cv2.imread(sourceFileName)
-
-
-        xSize  = avatar.shape[1]
-        ySize = avatar.shape[0]
-        print(sourceFileName)
-
-        for i in range(len(results[k][2][j])):
-
-            x=results[k][0][j][results[k][2][j][i]][0]
-            y=results[k][0][j][results[k][2][j][i]][1]
-
-            xp=results[k][1][j][results[k][2][j][i]][0]
-            yp=results[k][1][j][results[k][2][j][i]][1]
-
-            pos = np.ones(3)
-            posp = np.ones(3)
-
-
-            pos[0] = x
-            pos[1] = y
-
-            posp[0] = xp
-            posp[1] = yp
-
-            pos = np.dot(pos, np.linalg.inv(H.transpose()))
-
-            v = int(np.around(pos[1] / pos[2]))
-            u = int(np.around(pos[0] / pos[2]))
-
-            posp = np.dot(posp, np.linalg.inv(H.transpose()))
-
-            vp = int(np.around(posp[1] / posp[2]))
-            up = int(np.around(posp[0] / posp[2]))
-
-            cv2.rectangle(avatar, (up - 2, vp - 2), (up + 2, vp + 2), red, thickness=-1)
-            cv2.rectangle(avatar, (u - 2, v - 2), (u + 2, v + 2), green, thickness=-1)
-
-            # print('uv:')
-            # print(u, v)
-
-            #
-            # if results[k][1][j][i][0] != 0 and results[k][0][j][i][0]!=0 and results[k][0][j][i][0]==results[k][1][j][i][0]:
-            #     cv2.line(avatar, (u, v), (up, vp), (255,0,0),1)
-
-        cv2.imshow("avatar", avatar)
-        #imagename='/home/hesl/PycharmProjects/social-lstm-pytorch/plot/'+str(sample_args.visual_dataset)+'/visualize-'+ str(int(k*(10*(sample_args.obs_length+sample_args.pred_length))+j*10+data_loader.frameList[0][0])).zfill(3) +'.png'
-        imagename = '/home/hesl/PycharmProjects/social-lstm-pytorch/plot'+'/visualize-' + str(int(
-            k * (10 * (sample_args.obs_length + sample_args.pred_length)) + j * 10 + data_loader.frameList[0][
-                0])).zfill(3) + '.png'
-
-        #print(imagename)
-
-        cv2.imwrite(imagename, avatar)
-        #print(t)
-        #cv2.waitKey(0)
-
-
-
-#Visualize result of normalized world coordinate data
-#10frame-by-10frame
-#Each Trajectory
 # for k in range(int((len(data_loader.frameList[0])/10)/(sample_args.obs_length+sample_args.pred_length))):
 #     #Each frame
 #     for j in range(sample_args.obs_length+sample_args.pred_length):
@@ -282,19 +214,13 @@ for k in range(int((len(data_loader.frameList[0])/10)/(sample_args.obs_length+sa
 #         ySize = avatar.shape[0]
 #         print(sourceFileName)
 #
-#         for i in range(len(results[k+43][2][j])):
+#         for i in range(len(results[k][2][j])):
 #
-#             x=results[k+43][0][j][results[k+43][2][j][i]][0]
-#             y=results[k+43][0][j][results[k+43][2][j][i]][1]
+#             x=results[k][0][j][results[k][2][j][i]][0]
+#             y=results[k][0][j][results[k][2][j][i]][1]
 #
-#             xp=results[k+43][1][j][results[k+43][2][j][i]][0]
-#             yp=results[k+43][1][j][results[k+43][2][j][i]][1]
-#
-#             y=(((y)*(11.8703)))-9.4262
-#             x=(((x)*(18.6887)))-10.8239
-#
-#             yp = (((yp ) * (11.8703)) ) - 9.4262
-#             xp = (((xp ) * (18.6887)) ) - 10.8239
+#             xp=results[k][1][j][results[k][2][j][i]][0]
+#             yp=results[k][1][j][results[k][2][j][i]][1]
 #
 #             pos = np.ones(3)
 #             posp = np.ones(3)
@@ -318,7 +244,7 @@ for k in range(int((len(data_loader.frameList[0])/10)/(sample_args.obs_length+sa
 #
 #             cv2.rectangle(avatar, (up - 2, vp - 2), (up + 2, vp + 2), red, thickness=-1)
 #             cv2.rectangle(avatar, (u - 2, v - 2), (u + 2, v + 2), green, thickness=-1)
-#             cv2.line(avatar, (u, v), (up, vp), (255, 0, 0), 1)
+#
 #             # print('uv:')
 #             # print(u, v)
 #
@@ -327,11 +253,93 @@ for k in range(int((len(data_loader.frameList[0])/10)/(sample_args.obs_length+sa
 #             #     cv2.line(avatar, (u, v), (up, vp), (255,0,0),1)
 #
 #         cv2.imshow("avatar", avatar)
-#         imagename='/home/hesl/PycharmProjects/social-lstm-pytorch/plot/2_Normalized01'+'/visualize-'+ str(int(k*(10*(sample_args.obs_length+sample_args.pred_length))+j*10+data_loader.frameList[0][0])).zfill(3) +'.png'
+#         #imagename='/home/hesl/PycharmProjects/social-lstm-pytorch/plot/'+str(sample_args.visual_dataset)+'/visualize-'+ str(int(k*(10*(sample_args.obs_length+sample_args.pred_length))+j*10+data_loader.frameList[0][0])).zfill(3) +'.png'
+#         imagename = '/home/hesl/PycharmProjects/social-lstm-pytorch/plot'+'/visualize-' + str(int(
+#             k * (10 * (sample_args.obs_length + sample_args.pred_length)) + j * 10 + data_loader.frameList[0][
+#                 0])).zfill(3) + '.png'
+#
 #         #print(imagename)
 #
 #         cv2.imwrite(imagename, avatar)
 #         #print(t)
 #         #cv2.waitKey(0)
+#
+
+
+#Visualize result of normalized world coordinate data
+#10frame-by-10frame
+#Each Trajectory
+for k in range(int((len(data_loader.frameList[0])/10)/(sample_args.obs_length+sample_args.pred_length))):
+    #Each frame
+    for j in range(sample_args.obs_length+sample_args.pred_length):
+
+        sourceFileName = videopath[sample_args.visual_dataset]+"frame-" + str(int(k*(10*(sample_args.obs_length+sample_args.pred_length))+j*10+data_loader.frameList[0][0])).zfill(3) + ".jpg"
+
+        avatar= cv2.imread(sourceFileName)
+
+
+        xSize  = avatar.shape[1]
+        ySize = avatar.shape[0]
+        print(sourceFileName)
+
+        for i in range(len(results[k][2][j])):
+
+            x=results[k][0][j][results[k][2][j][i]][0]
+            y=results[k][0][j][results[k][2][j][i]][1]
+
+            xp=results[k][1][j][results[k][2][j][i]][0]
+            yp=results[k][1][j][results[k][2][j][i]][1]
+
+            # y=(((y)*(11.8703)))-9.4262
+            # x=(((x)*(18.6887)))-10.8239
+            #
+            # yp = (((yp ) * (11.8703)) ) - 9.4262
+            # xp = (((xp ) * (18.6887)) ) - 10.8239
+
+            pos = np.ones(3)
+            posp = np.ones(3)
+
+
+            pos[0] = x
+            pos[1] = y
+
+            posp[0] = xp
+            posp[1] = yp
+
+            pos = np.dot(pos, np.linalg.inv(H.transpose()))
+
+            # v = int(np.around(pos[1] / pos[2]))
+            # u = int(np.around(pos[0] / pos[2]))
+
+            u = int(np.round((x+1)*(xSize /2)))
+            v =  int(np.round((y+1)*(ySize /2)))
+
+            posp = np.dot(posp, np.linalg.inv(H.transpose()))
+            #
+            # vp = int(np.around(posp[1] / posp[2]))
+            # up = int(np.around(posp[0] / posp[2]))
+
+            up = int(np.round((xp + 1) * (xSize / 2)))
+            vp = int(np.round((yp + 1) * (ySize / 2)))
+
+            cv2.rectangle(avatar, (up - 2, vp - 2), (up + 2, vp + 2), red, thickness=-1)
+            cv2.rectangle(avatar, (u - 2, v - 2), (u + 2, v + 2), green, thickness=-1)
+            cv2.line(avatar, (u, v), (up, vp), (255, 0, 0), 1)
+            print('uv:')
+            print(u, v)
+            print('upvp:')
+            print(up, vp)
+
+            #
+            # if results[k][1][j][i][0] != 0 and results[k][0][j][i][0]!=0 and results[k][0][j][i][0]==results[k][1][j][i][0]:
+            #     cv2.line(avatar, (u, v), (up, vp), (255,0,0),1)
+
+        cv2.imshow("avatar", avatar)
+        imagename='/home/hesl/PycharmProjects/social-lstm-pytorch/plot/'+str(sample_args.visual_dataset)+'/visualize-'+ str(int(k*(10*(sample_args.obs_length+sample_args.pred_length))+j*10+data_loader.frameList[0][0])).zfill(3) +'.png'
+        #print(imagename)
+
+        #cv2.imwrite(imagename, avatar)
+        #print(t)
+        cv2.waitKey(0)
 
 print(len(results))
