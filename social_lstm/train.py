@@ -64,7 +64,7 @@ def main():
     parser.add_argument('--grid_size', type=int, default=4,
                         help='Grid size of the social grid')
     # The leave out dataset
-    parser.add_argument('--leaveDataset', type=int, default=1,
+    parser.add_argument('--leaveDataset', type=int, default=4,
                         help='The dataset index to be left out in training')
     # Lambda regularization parameter (L2)
     parser.add_argument('--lambda_param', type=float, default=0.0001,
