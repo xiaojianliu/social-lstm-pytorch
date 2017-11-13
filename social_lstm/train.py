@@ -87,7 +87,7 @@ def train(args):
     stgraph = ST_GRAPH(args.batch_size, args.seq_length + 1)
 
     # Log directory
-    log_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/log/HEWEI/'
+    log_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/log/HEWEI01/'
     log_directory += str(args.leaveDataset) + '/'
 
     # Logging files
@@ -95,7 +95,7 @@ def train(args):
     log_file = open(os.path.join(log_directory, 'val.txt'), 'w')
 
     # Save directory
-    save_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/save/HEWEI/'
+    save_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/save/HEWEI01/'
     save_directory += str(args.leaveDataset) + '/'
 
     # Dump the arguments into the configuration file

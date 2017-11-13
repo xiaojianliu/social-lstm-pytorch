@@ -24,15 +24,15 @@ class DataLoader():
         forcePreProcess : Flag to forcefully preprocess the data again from csv files
         '''
         # List of data directories where raw data resides
-        # self.data_dirs = ['/home/hesl/PycharmProjects/social-lstm-pytorch/data/eth/univ', '/home/hesl/PycharmProjects/social-lstm-pytorch/data/eth/hotel',
-        #                   '/home/hesl/PycharmProjects/social-lstm-pytorch/data/ucy/zara/zara01', '/home/hesl/PycharmProjects/social-lstm-pytorch/data/ucy/zara/zara02',
-        #                   '/home/hesl/PycharmProjects/social-lstm-pytorch/data/ucy/univ']
+        self.data_dirs = ['/home/hesl/PycharmProjects/social-lstm-pytorch/data/eth/univ', '/home/hesl/PycharmProjects/social-lstm-pytorch/data/eth/hotel',
+                          '/home/hesl/PycharmProjects/social-lstm-pytorch/data/ucy/zara/zara01', '/home/hesl/PycharmProjects/social-lstm-pytorch/data/ucy/zara/zara02',
+                          '/home/hesl/PycharmProjects/social-lstm-pytorch/data/ucy/univ']
 
-        self.data_dirs = ['/home/hesl/PycharmProjects/social-lstm-pytorch/data/eth/univ/HEWEI',
-                          '/home/hesl/PycharmProjects/social-lstm-pytorch/data/eth/hotel/HEWEI',
-                          '/home/hesl/PycharmProjects/social-lstm-pytorch/data/ucy/zara/zara01/HEWEI',
-                          '/home/hesl/PycharmProjects/social-lstm-pytorch/data/ucy/zara/zara02/HEWEI',
-                          '/home/hesl/PycharmProjects/social-lstm-pytorch/data/ucy/univ/HEWEI']
+        # self.data_dirs = ['/home/hesl/PycharmProjects/social-lstm-pytorch/data/eth/univ/HEWEI',
+        #                   '/home/hesl/PycharmProjects/social-lstm-pytorch/data/eth/hotel/HEWEI',
+        #                   '/home/hesl/PycharmProjects/social-lstm-pytorch/data/ucy/zara/zara01/HEWEI',
+        #                   '/home/hesl/PycharmProjects/social-lstm-pytorch/data/ucy/zara/zara02/HEWEI',
+        #                   '/home/hesl/PycharmProjects/social-lstm-pytorch/data/ucy/univ/HEWEI']
 
         self.used_data_dirs = [self.data_dirs[x] for x in datasets]
         self.infer = infer
@@ -97,7 +97,7 @@ class DataLoader():
 
             #file_path = os.path.join(directory, 'pixel_pos_interpolate.csv')
 
-            file_path = os.path.join(directory, 'world_coordinate_inter_normalized.csv')
+            file_path = os.path.join(directory, 'pixel_pos_interpolate.csv')
 
             # Load the data from the csv file
             data = np.genfromtxt(file_path, delimiter=',')
@@ -309,7 +309,7 @@ class DataLoader():
 
     def reset_batch_pointer(self, valid=False):
         '''
-        Reset all pointers
+        Reset all pointersworld_coordinate_inter
         '''
         if not valid:
             # Go to the first frame of the first dataset
