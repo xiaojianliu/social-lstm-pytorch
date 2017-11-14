@@ -20,57 +20,59 @@ from criterion import Gaussian2DLikelihood
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--input_size', type=int, default=2)
-    parser.add_argument('--output_size', type=int, default=5)
-    # RNN size parameter (dimension of the output/hidden state)
-    parser.add_argument('--rnn_size', type=int, default=128,
-                        help='size of RNN hidden state')
-    # Size of each batch parameter
-    parser.add_argument('--batch_size', type=int, default=8,
-                        help='minibatch size')
-    # Length of sequence to be considered parameter
-    parser.add_argument('--seq_length', type=int, default=20,
-                        help='RNN sequence length')
-    parser.add_argument('--pred_length', type=int, default=12,
-                        help='prediction length')
-    # Number of epochs parameter
-    parser.add_argument('--num_epochs', type=int, default=150,
-                        help='number of epochs')
-    # Frequency at which the model should be saved parameter
-    parser.add_argument('--save_every', type=int, default=400,
-                        help='save frequency')
-    # TODO: (resolve) Clipping gradients for now. No idea whether we should
-    # Gradient value at which it should be clipped
-    parser.add_argument('--grad_clip', type=float, default=10.,
-                        help='clip gradients at this value')
-    # Learning rate parameter
-    parser.add_argument('--learning_rate', type=float, default=0.003,
-                        help='learning rate')
-    # Decay rate for the learning rate parameter
-    parser.add_argument('--decay_rate', type=float, default=0.95,
-                        help='decay rate for rmsprop')
-    # Dropout not implemented.
-    # Dropout probability parameter
-    parser.add_argument('--dropout', type=float, default=0,
-                        help='dropout probability')
-    # Dimension of the embeddings parameter
-    parser.add_argument('--embedding_size', type=int, default=64,
-                        help='Embedding dimension for the spatial coordinates')
-    # Size of neighborhood to be considered parameter
-    parser.add_argument('--neighborhood_size', type=int, default=32,
-                        help='Neighborhood size to be considered for social grid')
-    # Size of the social grid parameter
-    parser.add_argument('--grid_size', type=int, default=4,
-                        help='Grid size of the social grid')
-    # The leave out dataset
-    parser.add_argument('--leaveDataset', type=int, default=4,
-                        help='The dataset index to be left out in training')
-    # Lambda regularization parameter (L2)
-    parser.add_argument('--lambda_param', type=float, default=0.0001,
-                        help='L2 regularization parameter')
-    args = parser.parse_args()
-    train(args)
+    for index in range(5):
+        print('training dataset excluding ',index)
+        parser = argparse.ArgumentParser()
+        parser.add_argument('--input_size', type=int, default=2)
+        parser.add_argument('--output_size', type=int, default=5)
+        # RNN size parameter (dimension of the output/hidden state)
+        parser.add_argument('--rnn_size', type=int, default=128,
+                            help='size of RNN hidden state')
+        # Size of each batch parameter
+        parser.add_argument('--batch_size', type=int, default=8,
+                            help='minibatch size')
+        # Length of sequence to be considered parameter
+        parser.add_argument('--seq_length', type=int, default=20,
+                            help='RNN sequence length')
+        parser.add_argument('--pred_length', type=int, default=12,
+                            help='prediction length')
+        # Number of epochs parameter
+        parser.add_argument('--num_epochs', type=int, default=300,
+                            help='number of epochs')
+        # Frequency at which the model should be saved parameter
+        parser.add_argument('--save_every', type=int, default=400,
+                            help='save frequency')
+        # TODO: (resolve) Clipping gradients for now. No idea whether we should
+        # Gradient value at which it should be clipped
+        parser.add_argument('--grad_clip', type=float, default=10.,
+                            help='clip gradients at this value')
+        # Learning rate parameter
+        parser.add_argument('--learning_rate', type=float, default=0.003,
+                            help='learning rate')
+        # Decay rate for the learning rate parameter
+        parser.add_argument('--decay_rate', type=float, default=0.95,
+                            help='decay rate for rmsprop')
+        # Dropout not implemented.
+        # Dropout probability parameter
+        parser.add_argument('--dropout', type=float, default=0,
+                            help='dropout probability')
+        # Dimension of the embeddings parameter
+        parser.add_argument('--embedding_size', type=int, default=64,
+                            help='Embedding dimension for the spatial coordinates')
+        # Size of neighborhood to be considered parameter
+        parser.add_argument('--neighborhood_size', type=int, default=32,
+                            help='Neighborhood size to be considered for social grid')
+        # Size of the social grid parameter
+        parser.add_argument('--grid_size', type=int, default=4,
+                            help='Grid size of the social grid')
+        # The leave out dataset
+        parser.add_argument('--leaveDataset', type=int, default=index,
+                            help='The dataset index to be left out in training')
+        # Lambda regularization parameter (L2)
+        parser.add_argument('--lambda_param', type=float, default=0.0001,
+                            help='L2 regularization parameter')
+        args = parser.parse_args()
+        train(args)
 
 
 def train(args):
@@ -87,7 +89,7 @@ def train(args):
     stgraph = ST_GRAPH(args.batch_size, args.seq_length + 1)
 
     # Log directory
-    log_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/log/HEWEI01/'
+    log_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/log/epoch/'
     log_directory += str(args.leaveDataset) + '/'
 
     # Logging files
@@ -95,7 +97,7 @@ def train(args):
     log_file = open(os.path.join(log_directory, 'val.txt'), 'w')
 
     # Save directory
-    save_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/save/HEWEI01/'
+    save_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/save/epoch/'
     save_directory += str(args.leaveDataset) + '/'
 
     # Dump the arguments into the configuration file
