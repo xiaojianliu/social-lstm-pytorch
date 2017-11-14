@@ -1,4 +1,4 @@
-'''He Wei Oct23 2017'''
+'''By He Wei Oct23 2017'''
 
 import pickle
 import argparse
@@ -6,7 +6,7 @@ import os
 from utils import DataLoader
 import numpy as np
 import cv2
-from PIL import Image, ImageDraw
+
 
 green = (0,255,0)
 red = (0,0,255)
