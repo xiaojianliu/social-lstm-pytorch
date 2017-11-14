@@ -119,7 +119,7 @@ def plot_trajectories(true_trajs, pred_trajs, nodesPresent, obs_length, name, pl
     #     plt.savefig('plot_with_background/'+name+'.png')
     # else:
     #     file=plot_directory+name+'.png'
-    #     print(file)
+    #     print(file)pred_x
     #     plt.savefig(file)
 
 
@@ -132,16 +132,16 @@ def main():
 
     # Experiments
 
-    parser.add_argument('--test_dataset', type=int, default=2,
+    parser.add_argument('--test_dataset', type=int, default=0,
                         help='test dataset index')
 
     # Parse the parameters
     args = parser.parse_args()
 
     # Save directory
-    save_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/save/'
+    save_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/save/HEWEI/'
     save_directory += str(args.test_dataset) + '/'
-    plot_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/plot/'
+    plot_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/plot/HEWEI/'
 
     f = open(save_directory+'results.pkl', 'rb')
     results = pickle.load(f)

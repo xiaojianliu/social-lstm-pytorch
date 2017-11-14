@@ -17,11 +17,11 @@ from utils import DataLoader
 from grid import getSequenceGridMask
 from st_graph import ST_GRAPH
 from criterion import Gaussian2DLikelihood
-
+from GPU_priority import GPUManager
 
 def main():
     for index in range(5):
-        print('training dataset excluding ',index)
+        print('training dataset excluding ', index)
         parser = argparse.ArgumentParser()
         parser.add_argument('--input_size', type=int, default=2)
         parser.add_argument('--output_size', type=int, default=5)
@@ -76,6 +76,9 @@ def main():
 
 
 def train(args):
+    # gm = GPUManager()
+    # torch.cuda.set_device(gm.auto_choice())
+
     datasets = [i for i in range(5)]
 
 
@@ -89,7 +92,7 @@ def train(args):
     stgraph = ST_GRAPH(args.batch_size, args.seq_length + 1)
 
     # Log directory
-    log_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/log/epoch/'
+    log_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/log/WorldUnnormalized300epochs/'
     log_directory += str(args.leaveDataset) + '/'
 
     # Logging files
@@ -97,7 +100,7 @@ def train(args):
     log_file = open(os.path.join(log_directory, 'val.txt'), 'w')
 
     # Save directory
-    save_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/save/epoch/'
+    save_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/save/WorldUnnormalized300epochs/'
     save_directory += str(args.leaveDataset) + '/'
 
     # Dump the arguments into the configuration file
