@@ -23,8 +23,8 @@ class DataLoader():
         datasets : The indices of the datasets to use
         forcePreProcess : Flag to forcefully preprocess the data again from csv files
         '''
-        # List of data directories where raw data resides
-        # self.data_dirs = ['/home/hesl/PycharmProjects/social-lstm-pytorch/data/eth/univ', '/home/hesl/PycharmProjects/social-lstm-pytorch/eth/hotel',
+        #List of data directories where raw data resides
+        # self.data_dirs = ['/home/hesl/PycharmProjects/social-lstm-pytorch/data/eth/univ', '/home/hesl/PycharmProjects/social-lstm-pytorch/data/eth/hotel',
         #                   '/home/hesl/PycharmProjects/social-lstm-pytorch/data/ucy/zara/zara01', '/home/hesl/PycharmProjects/social-lstm-pytorch/data/ucy/zara/zara02',
         #                   '/home/hesl/PycharmProjects/social-lstm-pytorch/data/ucy/univ']
 
@@ -97,7 +97,7 @@ class DataLoader():
 
             #file_path = os.path.join(directory, 'pixel_pos_interpolate.csv')
 
-            file_path = os.path.join(directory, 'world_coordinate_inter.csv')
+            file_path = os.path.join(directory, 'pixel_coordinate_inter_normalized.csv')
 
             # Load the data from the csv file
             data = np.genfromtxt(file_path, delimiter=',')
@@ -115,7 +115,7 @@ class DataLoader():
             # Initialize the list of numpy arrays for the current dataset
             valid_frame_data.append([])
 
-            skip = 10
+            skip = 1 #previous 10
 
             for ind, frame in enumerate(frameList):
 

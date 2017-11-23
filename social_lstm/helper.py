@@ -154,7 +154,7 @@ def compute_edges(nodes, tstep, edgesPresent):
     return edges
 
 
-def get_mean_error(ret_nodes, nodes, assumedNodesPresent, trueNodesPresent):
+def get_mean_error(ret_nodes, nodes, assumedNodesPresent, trueNodesPresent,H,test_dataset):
     '''
     Parameters
     ==========
@@ -168,6 +168,10 @@ def get_mean_error(ret_nodes, nodes, assumedNodesPresent, trueNodesPresent):
     nodesPresent : A list of lists, of size pred_length
     Each list contains the nodeIDs of the nodes present at that time-step
 
+    H: homography
+
+    test_dataset:index of test dataset
+
     Returns
     =======
 
@@ -176,6 +180,13 @@ def get_mean_error(ret_nodes, nodes, assumedNodesPresent, trueNodesPresent):
     pred_length = ret_nodes.size()[0]
     error = torch.zeros(pred_length).cuda()
     counter = 0
+
+    if test_dataset==0:
+        width=640
+        height=480
+    else:
+        width=720
+        height=576
 
     for tstep in range(pred_length):
 
@@ -187,6 +198,60 @@ def get_mean_error(ret_nodes, nodes, assumedNodesPresent, trueNodesPresent):
             pred_pos = ret_nodes[tstep, nodeID, :]
             true_pos = nodes[tstep, nodeID, :]
 
+            #transform pixel pos into meter
+            pos=np.ones(3)
+            posp=np.ones(3)
+
+            #GT transformation
+            u=int(round((true_pos[0]+1)*width/2))
+            v=int(round((true_pos[1]+1)*height/2))
+
+            print('u',u)
+            print('v', v)
+
+            if test_dataset==0 or test_dataset==1:
+                pos[0] = v
+                pos[1] = u
+            else:
+                pos[0] = u
+                pos[1] = v
+
+            true_pos_temp=torch.cuda.FloatTensor(np.dot(pos,H.transpose()))
+
+            x=true_pos_temp[0]/true_pos_temp[2]
+            y=true_pos_temp[1]/true_pos_temp[2]
+
+            print('x', x)
+            print('y', y)
+
+            true_pos_temp[0]=x
+            true_pos_temp[1]=y
+
+            #Prediction Transform
+            up = int(round((pred_pos[0]+1)*width/2))
+            vp = int(round((pred_pos[1]+1)*height/2))
+
+            if test_dataset==0 or test_dataset==1:
+                posp[0] = vp
+                posp[1] = up
+            else:
+                posp[0] = up
+                posp[1] = vp
+
+            pred_pos_temp =torch.cuda.FloatTensor(np.dot(posp, H.transpose()))
+
+            xp = pred_pos_temp[0] / pred_pos_temp[2]
+            yp = pred_pos_temp[1] / pred_pos_temp[2]
+
+            pred_pos_temp[0] = xp
+            pred_pos_temp[1] = yp
+
+            print('up', up)
+            print('vp', vp)
+
+            print('xp', xp)
+            print('yp', yp)
+
             error[tstep] += torch.norm(pred_pos - true_pos, p=2)
             counter += 1
 
@@ -196,7 +261,7 @@ def get_mean_error(ret_nodes, nodes, assumedNodesPresent, trueNodesPresent):
     return torch.mean(error)
 
 
-def get_final_error(ret_nodes, nodes, assumedNodesPresent, trueNodesPresent):
+def get_final_error(ret_nodes, nodes, assumedNodesPresent, trueNodesPresent,H,test_dataset):
     '''
     Parameters
     ==========
@@ -210,6 +275,11 @@ def get_final_error(ret_nodes, nodes, assumedNodesPresent, trueNodesPresent):
     nodesPresent : A list of lists, of size pred_length
     Each list contains the nodeIDs of the nodes present at that time-step
 
+    H: homography
+
+    test_dataset:index of test dataset
+
+
     Returns
     =======
 
@@ -219,18 +289,68 @@ def get_final_error(ret_nodes, nodes, assumedNodesPresent, trueNodesPresent):
     error = 0
     counter = 0
 
+    if test_dataset==0:
+        width=640
+        height=480
+    else:
+        width=720
+        height=576
+
     # Last time-step
     tstep = pred_length - 1
     for nodeID in assumedNodesPresent:
 
         if nodeID not in trueNodesPresent[tstep]:
             continue
-        
+
         pred_pos = ret_nodes[tstep, nodeID, :]
         true_pos = nodes[tstep, nodeID, :]
-        
+
+        # transform pixel pos into meter
+        pos = np.ones(3)
+        posp = np.ones(3)
+
+        # GT transformation
+        u = int(round((true_pos[0] + 1) * width / 2))
+        v = int(round((true_pos[1] + 1) * height / 2))
+
+        if test_dataset == 0 or test_dataset == 1:
+            pos[0] = v
+            pos[1] = u
+        else:
+            pos[0] = u
+            pos[1] = v
+
+        true_pos_temp = torch.cuda.FloatTensor(np.dot(pos, H.transpose()))
+
+        x = true_pos_temp[0] / true_pos_temp[2]
+        y = true_pos_temp[1] / true_pos_temp[2]
+
+        true_pos_temp[0] = x
+        true_pos_temp[1] = y
+
+        # Prediction Transform
+        up = int(round((pred_pos[0] + 1) * width / 2))
+        vp = int(round((pred_pos[1] + 1) * height / 2))
+
+        if test_dataset == 0 or test_dataset == 1:
+            posp[0] = vp
+            posp[1] = up
+        else:
+            posp[0] = up
+            posp[1] = vp
+
+        pred_pos_temp = torch.cuda.FloatTensor(np.dot(posp, H.transpose()))
+
+        xp = pred_pos_temp[0] / pred_pos_temp[2]
+        yp = pred_pos_temp[1] / pred_pos_temp[2]
+
+        pred_pos_temp[0] = xp
+        pred_pos_temp[1] = yp
+
         error += torch.norm(pred_pos - true_pos, p=2)
         counter += 1
+
         
     if counter != 0:
         error = error / counter
