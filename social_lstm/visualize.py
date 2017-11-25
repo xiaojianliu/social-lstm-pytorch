@@ -132,14 +132,14 @@ def main():
 
     # Experiments
 
-    parser.add_argument('--test_dataset', type=int, default=0,
+    parser.add_argument('--test_dataset', type=int, default=1,
                         help='test dataset index')
 
     # Parse the parameters
     args = parser.parse_args()
 
     # Save directory
-    save_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/save/HEWEI/'
+    save_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/save/'
     save_directory += str(args.test_dataset) + '/'
     plot_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/plot/HEWEI/'
 

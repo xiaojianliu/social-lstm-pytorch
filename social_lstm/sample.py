@@ -40,18 +40,18 @@ def main():
     parser.add_argument('--pred_length', type=int, default=12,
                         help='Predicted length of the trajectory')
     # Test dataset
-    parser.add_argument('--test_dataset', type=int, default=4,
+    parser.add_argument('--test_dataset', type=int, default=1,
                         help='Dataset to be tested on')
 
     # Model to be loaded
-    parser.add_argument('--epoch', type=int, default=163,
+    parser.add_argument('--epoch', type=int, default=88,
                         help='Epoch of model to be loaded')
 
     # Parse the parameters
     sample_args = parser.parse_args()
 
     # Save directory
-    save_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/save/WorldUnnormalized300epochs/'+ str(sample_args.test_dataset) + '/'
+    save_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/save/FixedPixel_Normalized_150epoch_skip1frame/'+ str(sample_args.test_dataset) + '/'
 
     # Define the path for the config file for saved args
     with open(os.path.join(save_directory, 'config.pkl'), 'rb') as f:
