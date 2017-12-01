@@ -29,6 +29,12 @@ H_path=['/media/hesl/OS/Documents and Settings/N1701420F/Desktop/pedestrians/ewa
         '/media/hesl/OS/Documents and Settings/N1701420F/Desktop/pedestrians/ucy_crowd/data_zara02/H.txt',
         '/media/hesl/OS/Documents and Settings/N1701420F/Desktop/pedestrians/ucy_crowd/data_students03/H.txt']
 
+H_path=['/home/hesl/Desktop/KITTITrackinData/GT/0012/H.txt',
+        '/home/hesl/Desktop/KITTITrackinData/GT/0013/H.txt',
+        '/home/hesl/Desktop/KITTITrackinData/GT/0015/H.txt',
+        '/home/hesl/Desktop/KITTITrackinData/GT/0016/H.txt',
+        '/home/hesl/Desktop/KITTITrackinData/GT/0017/H.txt',
+        '/home/hesl/Desktop/KITTITrackinData/GT/0019/H.txt']
 
 def main():
 
@@ -40,18 +46,22 @@ def main():
     parser.add_argument('--pred_length', type=int, default=12,
                         help='Predicted length of the trajectory')
     # Test dataset
-    parser.add_argument('--test_dataset', type=int, default=1,
+    parser.add_argument('--test_dataset', type=int, default=3,
                         help='Dataset to be tested on')
 
     # Model to be loaded
-    parser.add_argument('--epoch', type=int, default=88,
+    parser.add_argument('--epoch', type=int, default=107,
                         help='Epoch of model to be loaded')
 
     # Parse the parameters
     sample_args = parser.parse_args()
 
     # Save directory
-    save_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/save/FixedPixel_Normalized_150epoch_skip1frame/'+ str(sample_args.test_dataset) + '/'
+    save_directory = '/home/hesl/PycharmProjects/social-lstm-pytorch/save/FixedPixel_Normalized_150epoch/'+ str(sample_args.test_dataset) + '/'
+
+    save_directory='/home/hesl/PycharmProjects/social-lstm-pytorch/save/FixedPixel_Normalized_150epoch/1/'
+    ouput_directory='/home/hesl/PycharmProjects/social-lstm-pytorch/save/'
+
 
     # Define the path for the config file for saved args
     with open(os.path.join(save_directory, 'config.pkl'), 'rb') as f:
@@ -108,6 +118,8 @@ def main():
         else:
             dimensions = [720, 576]
 
+        dimensions=[1224,370]
+
         # Get the grid masks for the sequence
         grid_seq = getSequenceGridMask(x_seq, dimensions, saved_args.neighborhood_size, saved_args.grid_size)
 
@@ -141,7 +153,7 @@ def main():
     print('Total final error of the model is ', final_error / dataloader.num_batches)
 
     print('Saving results')
-    with open(os.path.join(save_directory, 'results.pkl'), 'wb') as f:
+    with open(os.path.join(ouput_directory, 'results.pkl'), 'wb') as f:
         pickle.dump(results, f)
 
 

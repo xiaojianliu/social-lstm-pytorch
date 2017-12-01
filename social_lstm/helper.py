@@ -198,61 +198,80 @@ def get_mean_error(ret_nodes, nodes, assumedNodesPresent, trueNodesPresent,H,tes
             pred_pos = ret_nodes[tstep, nodeID, :]
             true_pos = nodes[tstep, nodeID, :]
 
-            #transform pixel pos into meter
-            pos=np.ones(3)
-            posp=np.ones(3)
+            true_pos_temp = torch.cuda.FloatTensor(2)
+            pred_pos_temp = torch.cuda.FloatTensor(2)
 
-            #GT transformation
-            u=int(round((true_pos[0]+1)*width/2))
-            v=int(round((true_pos[1]+1)*height/2))
+            print('pred_pos={}'.format(pred_pos))
+            print('true_pos={}'.format(true_pos))
 
-            print('u',u)
-            print('v', v)
+            # #transform pixel pos into meter
+            # pos=np.ones(3)
+            # posp=np.ones(3)
+            #
+            # #GT transformation
+            # u=int(round((true_pos[0]+1)*width/2))
+            # v=int(round((true_pos[1]+1)*height/2))
+            #
+            # print('u',u)
+            # print('v', v)
+            #
+            # if test_dataset==0 or test_dataset==1:
+            #     pos[0] = v
+            #     pos[1] = u
+            # else:
+            #     pos[0] = u
+            #     pos[1] = v
+            #
+            # true_pos_temp=torch.cuda.FloatTensor(np.dot(pos,H.transpose()))
+            #
+            # x=true_pos_temp[0]/true_pos_temp[2]
+            # y=true_pos_temp[1]/true_pos_temp[2]
+            #
+            # print('x', x)
+            # print('y', y)
+            #
+            # true_pos_temp[0]=x
+            # true_pos_temp[1]=y
+            #
+            # #Prediction Transform
+            # up = int(round((pred_pos[0]+1)*width/2))
+            # vp = int(round((pred_pos[1]+1)*height/2))
+            #
+            # if test_dataset==0 or test_dataset==1:
+            #     posp[0] = vp
+            #     posp[1] = up
+            # else:
+            #     posp[0] = up
+            #     posp[1] = vp
+            #
+            # pred_pos_temp =torch.cuda.FloatTensor(np.dot(posp, H.transpose()))
+            #
+            # xp = pred_pos_temp[0] / pred_pos_temp[2]
+            # yp = pred_pos_temp[1] / pred_pos_temp[2]
+            #
+            # pred_pos_temp[0] = xp
+            # pred_pos_temp[1] = yp
+            #
+            # print('up', up)
+            # print('vp', vp)
+            #
+            # print('xp', xp)
+            # print('yp', yp)
 
-            if test_dataset==0 or test_dataset==1:
-                pos[0] = v
-                pos[1] = u
-            else:
-                pos[0] = u
-                pos[1] = v
+            # Z
+            pred_pos_temp[1] = (true_pos[1] + 1) * (28.3571 * 0.5) +2.6694
+            # X
+            pred_pos_temp[0] = (true_pos[0] + 1) * (14.2367 *0.5) - 9.4110
 
-            true_pos_temp=torch.cuda.FloatTensor(np.dot(pos,H.transpose()))
+            # Z
+            true_pos_temp[1] = (pred_pos[1] + 1) * (28.3571 * 0.5) +2.6694
+            # X
+            true_pos_temp[0] = (pred_pos[0] + 1) * (14.2367 *0.5) - 9.4110
 
-            x=true_pos_temp[0]/true_pos_temp[2]
-            y=true_pos_temp[1]/true_pos_temp[2]
+            print('pred_pos_temp={}'.format(pred_pos_temp))
+            print('true_pos_temp={}'.format(true_pos_temp))
 
-            print('x', x)
-            print('y', y)
-
-            true_pos_temp[0]=x
-            true_pos_temp[1]=y
-
-            #Prediction Transform
-            up = int(round((pred_pos[0]+1)*width/2))
-            vp = int(round((pred_pos[1]+1)*height/2))
-
-            if test_dataset==0 or test_dataset==1:
-                posp[0] = vp
-                posp[1] = up
-            else:
-                posp[0] = up
-                posp[1] = vp
-
-            pred_pos_temp =torch.cuda.FloatTensor(np.dot(posp, H.transpose()))
-
-            xp = pred_pos_temp[0] / pred_pos_temp[2]
-            yp = pred_pos_temp[1] / pred_pos_temp[2]
-
-            pred_pos_temp[0] = xp
-            pred_pos_temp[1] = yp
-
-            print('up', up)
-            print('vp', vp)
-
-            print('xp', xp)
-            print('yp', yp)
-
-            error[tstep] += torch.norm(pred_pos - true_pos, p=2)
+            error[tstep] += torch.norm(pred_pos_temp - true_pos_temp, p=2)
             counter += 1
 
         if counter != 0:
@@ -306,49 +325,66 @@ def get_final_error(ret_nodes, nodes, assumedNodesPresent, trueNodesPresent,H,te
         pred_pos = ret_nodes[tstep, nodeID, :]
         true_pos = nodes[tstep, nodeID, :]
 
+        print('pred_pos={}'.format(pred_pos))
+        print('true_pos={}'.format(true_pos))
+
+        true_pos_temp = torch.cuda.FloatTensor(2)
+        pred_pos_temp = torch.cuda.FloatTensor(2)
+
+
         # transform pixel pos into meter
-        pos = np.ones(3)
-        posp = np.ones(3)
+        #
+        # # GT transformation
+        # u = int(round((true_pos[0] + 1) * width / 2))
+        # v = int(round((true_pos[1] + 1) * height / 2))
+        #
+        # if test_dataset == 0 or test_dataset == 1:
+        #     pos[0] = v
+        #     pos[1] = u
+        # else:
+        #     pos[0] = u
+        #     pos[1] = v
+        #
+        # true_pos_temp = torch.cuda.FloatTensor(np.dot(pos, H.transpose()))
+        #
+        # x = true_pos_temp[0] / true_pos_temp[2]
+        # y = true_pos_temp[1] / true_pos_temp[2]
+        #
+        # true_pos_temp[0] = x
+        # true_pos_temp[1] = y
+        #
+        # # Prediction Transform
+        # up = int(round((pred_pos[0] + 1) * width / 2))
+        # vp = int(round((pred_pos[1] + 1) * height / 2))
+        #
+        # if test_dataset == 0 or test_dataset == 1:
+        #     posp[0] = vp
+        #     posp[1] = up
+        # else:
+        #     posp[0] = up
+        #     posp[1] = vp
+        #
+        # pred_pos_temp = torch.cuda.FloatTensor(np.dot(posp, H.transpose()))
+        #
+        # xp = pred_pos_temp[0] / pred_pos_temp[2]
+        # yp = pred_pos_temp[1] / pred_pos_temp[2]
+        #
+        # pred_pos_temp[0] = xp
+        # pred_pos_temp[1] = yp
 
-        # GT transformation
-        u = int(round((true_pos[0] + 1) * width / 2))
-        v = int(round((true_pos[1] + 1) * height / 2))
+        #Z
+        pred_pos_temp[1] = (true_pos[1]+1)*(28.3571 * 0.5) +2.6694
+        #X
+        pred_pos_temp[0] = (true_pos[0]+1)*(14.2367 *0.5) - 9.4110
 
-        if test_dataset == 0 or test_dataset == 1:
-            pos[0] = v
-            pos[1] = u
-        else:
-            pos[0] = u
-            pos[1] = v
+        #Z
+        true_pos_temp[1] = (pred_pos[1] + 1) * (28.3571 * 0.5) +2.6694
+        #X
+        true_pos_temp[0] = (pred_pos[0] + 1) *(14.2367 *0.5) - 9.4110
 
-        true_pos_temp = torch.cuda.FloatTensor(np.dot(pos, H.transpose()))
-
-        x = true_pos_temp[0] / true_pos_temp[2]
-        y = true_pos_temp[1] / true_pos_temp[2]
-
-        true_pos_temp[0] = x
-        true_pos_temp[1] = y
-
-        # Prediction Transform
-        up = int(round((pred_pos[0] + 1) * width / 2))
-        vp = int(round((pred_pos[1] + 1) * height / 2))
-
-        if test_dataset == 0 or test_dataset == 1:
-            posp[0] = vp
-            posp[1] = up
-        else:
-            posp[0] = up
-            posp[1] = vp
-
-        pred_pos_temp = torch.cuda.FloatTensor(np.dot(posp, H.transpose()))
-
-        xp = pred_pos_temp[0] / pred_pos_temp[2]
-        yp = pred_pos_temp[1] / pred_pos_temp[2]
-
-        pred_pos_temp[0] = xp
-        pred_pos_temp[1] = yp
-
-        error += torch.norm(pred_pos - true_pos, p=2)
+        print('pred_pos_temp={}'.format(pred_pos_temp))
+        print('true_pos_temp={}'.format(true_pos_temp))
+        error += torch.norm(pred_pos_temp - true_pos_temp, p=2)
         counter += 1
 
         
